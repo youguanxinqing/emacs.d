@@ -4,7 +4,7 @@
                          ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 (package-initialize)
 
-(add-to-list 'load-path "site-packages/open-newline/")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/open-newline/")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -32,6 +32,9 @@
 (set-fontset-font "fontset-default" 'han "微软雅黑" nil 'append)
 (load-theme 'modus-operandi-tinted t)
 (tool-bar-mode 0)
+
+;; keymap
+(global-set-key (kbd "C-h") 'delete-backward-char)
 
 ;; --- end 
 
@@ -70,4 +73,4 @@
 (global-set-key (kbd "C-o") 'open-newline-below)
 (global-set-key (kbd "C-S-o") 'open-newline-above)
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
+
