@@ -89,8 +89,8 @@
 (require 'evil)
 (evil-mode 1)
 
-
+;; --- begin site-lisp
 (require 'open-newline)
 (global-set-key (kbd "C-o") 'open-newline-below)
 (global-set-key (kbd "C-S-o") 'open-newline-above)
-
+;; --- end 
