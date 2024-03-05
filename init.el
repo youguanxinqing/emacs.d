@@ -17,7 +17,7 @@
  '(custom-safe-themes
    '("4b026ac68a1aa4d1a91879b64f54c2490b4ecad8b64de5b1865bca0addd053d9" "d92c1c36a5181cf629749bf6feee1886cf6bce248ab075c9d1b1f6096fea9539" "98ef36d4487bf5e816f89b1b1240d45755ec382c7029302f36ca6626faf44bbd" "ba323a013c25b355eb9a0550541573d535831c557674c8d59b9ac6aa720c21d3" "046a2b81d13afddae309930ef85d458c4f5d278a69448e5a5261a5c78598e012" "7b8f5bbdc7c316ee62f271acf6bcd0e0b8a272fdffe908f8c920b0ba34871d98" "d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d" "bbb13492a15c3258f29c21d251da1e62f1abb8bbd492386a673dcfab474186af" "7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" "21e3d55141186651571241c2ba3c665979d1e886f53b2e52411e9e96659132d4" default))
  '(package-selected-packages
-   '(which-key evil rg orderless doom-modeline color-theme org-roam-ui org-roam vertico modus-themes))
+   '(consult wgrep embark-consult which-key evil rg orderless doom-modeline color-theme org-roam-ui org-roam vertico modus-themes))
  '(warning-suppress-log-types '((emacs)))
  '(warning-suppress-types '((emacs))))
 (custom-set-faces
@@ -91,6 +91,48 @@
 
 (require 'which-key)
 (which-key-mode)
+
+(package-install 'consult)
+;;replace swiper
+(global-set-key (kbd "C-s") 'consult-line)
+;;consult-imenu
+
+(package-install 'embark-consult)
+(package-install 'wgrep)
+(setq wgrep-auto-save-buffer t)
+
+(eval-after-load
+    'consult
+  '(eval-after-load
+       'embark
+     '(progn
+        (require 'embark-consult)
+        (add-hook
+         'embark-collect-mode-hook
+         #'consult-preview-at-point-mode))))
+
+(define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
+
+;;使用ripgrep来进行搜索
+;;consult-ripgrep
+
+;;everyting
+;;consult-locate
+;; 配置搜索中文
+(progn
+  (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+  (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+  )
+(eval-after-load 'consult
+  (progn
+    (setq
+     consult-narrow-key "<"
+     consult-line-numbers-widen t
+     consult-async-min-input 2
+     consult-async-refresh-delay  0.15
+     consult-async-input-throttle 0.2
+     consult-async-input-debounce 0.1)
+    ))
 
 
 ;; --- begin site-lisp
