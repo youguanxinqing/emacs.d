@@ -33,6 +33,7 @@
 
 ;; --- begin basic conf ---
 
+(server-mode 1)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -95,6 +96,10 @@
 (require 'marginalia)
 (marginalia-mode t)
 
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-item 10)
+
 (global-company-mode 1)
 ;; company mode 默认选择上一条和下一条候选项命令 M-n M-p
 (define-key company-active-map (kbd "C-n") 'company-select-next)
@@ -108,6 +113,7 @@
 ;;replace swiper
 (global-set-key (kbd "C-s") 'consult-line)
 ;;consult-imenu
+(global-set-key (kbd "C-x b") 'consult-buffer)
 
 (package-install 'embark-consult)
 (package-install 'wgrep)
