@@ -45,10 +45,7 @@
 (set-fontset-font "fontset-default" 'han "微软雅黑" nil 'append)
 (load-theme 'modus-operandi-tinted t)
 (tool-bar-mode 0)
-(global-display-line-numbers-mode t)
-;;让鼠标滚动更好用
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
-(setq mouse-wheel-progressive-speed nil)
+(setq-default fill-column 120)
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 (global-set-key (kbd "C-h C-v") 'find-variable)
@@ -137,7 +134,9 @@
                   nil 0 nil
                   (file-name-directory (expand-file-name file)))))
 
-(define-key embark-file-map (kbd "E") #'consult-directory-externally)
+(eval-after-load 'embark
+  '(define-key embark-file-map (kbd "E") #'consult-directory-externally))
+
 ;;打开当前文件的目录
 (defun my-open-current-directory ()
   (interactive)
