@@ -46,10 +46,12 @@
 (load-theme 'modus-operandi-tinted t)
 (tool-bar-mode 0)
 (setq-default fill-column 120)
+(setq-default cursor-type 'bar)
 
-(global-set-key (kbd "C-h C-f") 'find-function)
-(global-set-key (kbd "C-h C-v") 'find-variable)
-(global-set-key (kbd "C-h C-k") 'find-function-on-key)
+;; (global-set-key (kbd "C-h C-f") 'find-function)
+;; (global-set-key (kbd "C-h C-v") 'find-variable)
+;; (global-set-key (kbd "C-h C-k") 'find-function-on-key)
+(global-set-key (kbd "C-h") 'backward-delete-char)
 
 ;; --- end 
 
@@ -92,8 +94,8 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-(require 'evil)
-(evil-mode 1)
+;; (require 'evil)
+;; (evil-mode 1)
 
 (require 'which-key)
 (which-key-mode)
