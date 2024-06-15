@@ -33,7 +33,7 @@
 ;; ----------- customize configuration start ---
 
 ;; in $DOOMDIR/config.el
-(setq doom-font (font-spec :size 18))
+(setq doom-font (font-spec :size 24))
 (setq rustic-lsp-server 'rust-analyzer)
 
 
