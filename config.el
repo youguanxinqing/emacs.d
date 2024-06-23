@@ -41,6 +41,13 @@
   "s" nil
   "S" nil)
 
+;; rime
+(use-package! rime
+  :config
+  (setq default-input-method "rime"
+        rime-show-candidate 'posframe))
+(global-set-key (kbd "C-x C-d") 'toggle-input-method)
+(global-set-key (kbd "M-j") 'rime-inline-ascii)
 
 
 ;; ----------- customize configuration end   ---
