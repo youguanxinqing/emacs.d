@@ -30,7 +30,6 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy               ; a search engine for love and life
-        +childframe
         +fuzzy
         +icons)
        vertico           ; the search engine of the future

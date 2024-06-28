@@ -49,6 +49,7 @@
 (global-set-key (kbd "C-x C-d") 'toggle-input-method)
 (global-set-key (kbd "M-j") 'rime-inline-ascii)
 
+(global-set-key (kbd "C-s") 'evil-avy-goto-word-1)
 
 ;; ----------- customize configuration end   ---
 
