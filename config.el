@@ -51,6 +51,11 @@
 
 (global-set-key (kbd "C-s") 'evil-avy-goto-word-1)
 
+(map! :n "C-t" nil)
+(define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward-swap)
+(global-set-key [remap evil-jump-to-tag] nil)
+(define-key evil-motion-state-map (kbd "C-]") 'evil-jump-to-tag)
+
 ;; ----------- customize configuration end   ---
 
 
