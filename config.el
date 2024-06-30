@@ -56,6 +56,17 @@
 (global-set-key [remap evil-jump-to-tag] nil)
 (define-key evil-motion-state-map (kbd "C-]") 'evil-jump-to-tag)
 
+(map! :leader
+
+      :desc "Find file from here"  "SPC"  #'find-file
+
+      (:prefix-map ("f" . "file")
+       :desc "Search project"  "w"  #'+default/search-project
+       :desc "Find file from workspace"  "f"  #'+default/find-file-under-here
+       :desc "Find file from here"  "F"  #'find-file
+       :desc "Search current directory"  "d"  #'+default/search-cwd)
+      )
+
 ;; ----------- customize configuration end   ---
 
 
