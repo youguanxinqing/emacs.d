@@ -32,8 +32,10 @@
 
 ;; ----------- customize configuration start ---
 
+(add-to-list 'load-path "~/.config/doom/customizations")
+(load "init.el")
+
 ;; in $DOOMDIR/config.el
-(setq doom-font (font-spec :size 22))
 (setq rustic-lsp-server 'rust-analyzer)
 
 ;; close evil-snipe-s
