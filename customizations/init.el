@@ -1,5 +1,7 @@
 ;;; customizations/init.el -*- lexical-binding: t; -*-
 
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
 ;; font --------- start
 (setq doom-font (font-spec :size 22))
 
