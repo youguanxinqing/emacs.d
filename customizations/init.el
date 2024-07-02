@@ -88,7 +88,7 @@
 
 ;; rime ----------- end
 
-(global-set-key (kbd "C-s") 'evil-avy-goto-word-1)
+(global-set-key (kbd "C-s") 'evil-avy-goto-char)
 
 
 ;; close evil-snipe-s
