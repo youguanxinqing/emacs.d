@@ -54,3 +54,7 @@
            :repo "DogLooksGood/emacs-rime"
            :files ("*.el" "Makefile" "lib.c"))
 )
+
+(package! fnm
+  :recipe (:host github
+           :repo "bobrowadam/fnm.el"))
