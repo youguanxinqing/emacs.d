@@ -98,6 +98,11 @@
   "s" nil
   "S" nil)
 
+;; map f, F
+(evil-define-key '(normal motion) evil-snipe-override-local-mode-map
+  "f" 'evil-avy-goto-char-in-line
+  "F" 'evil-avy-goto-char-in-line)
+
 (map! :n "C-t" nil)
 (define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward-swap)
 (global-set-key [remap evil-jump-to-tag] nil)
