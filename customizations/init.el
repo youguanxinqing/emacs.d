@@ -56,12 +56,6 @@
 
 (setq rustic-lsp-server 'rust-analyzer)
 
-
-(use-package! pyenv-mode
-  :defer 2
-  :config
-  (pyenv-mode))
-
 ;; rime ----------- start
 
 (defun guan/--get-input-method (action)

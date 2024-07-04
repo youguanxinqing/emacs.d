@@ -60,7 +60,3 @@
   :recipe (:host github
            :repo "bobrowadam/fnm.el"))
 
-
-(package! pyenv-mode
-  :recipe (:host github
-           :repo "pythonic-emacs/pyenv-mode"))
