@@ -55,6 +55,12 @@
            :files ("*.el" "Makefile" "lib.c"))
 )
 
+
 (package! fnm
   :recipe (:host github
            :repo "bobrowadam/fnm.el"))
+
+
+(package! pyenv-mode
+  :recipe (:host github
+           :repo "pythonic-emacs/pyenv-mode"))

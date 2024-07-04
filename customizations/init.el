@@ -57,6 +57,11 @@
 (setq rustic-lsp-server 'rust-analyzer)
 
 
+(use-package! pyenv-mode
+  :defer 2
+  :config
+  (pyenv-mode))
+
 ;; rime ----------- start
 
 (defun guan/--get-input-method (action)
@@ -68,18 +73,21 @@
                                           "Rime: Chinese"))
         ))
 
+;;;###autoload
 (defun guan/switch-input-method ()
   "switch input method: english or chinese"
   (interactive)
   (rime-inline-ascii)
   (rime--message-display-content (guan/--get-input-method "switch")))
 
+;;;###autoload
 (defun guan/show-input-method ()
   "show rime current input method"
   (interactive)
   (rime--message-display-content (guan/--get-input-method "show")))
 
 (use-package! rime
+  :defer 2
   :config
   (setq default-input-method "rime"
         rime-show-candidate 'posframe)
