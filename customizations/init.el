@@ -2,6 +2,7 @@
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+(load "+guan-color.el")
 ;; font --------- start
 (setq doom-font (font-spec :size 22))
 
@@ -108,9 +109,74 @@
 (global-set-key [remap evil-jump-to-tag] nil)
 (define-key evil-motion-state-map (kbd "C-]") 'evil-jump-to-tag)
 
+;; highlight symbol
+(require 'hi-lock)
+
+(setq color-candinates '('guan-match-light-green
+                         'guan-match-green-yellow
+                         'guan-match-gold
+                         'guan-match-salmon
+                         'guan-match-medium-violet-red
+                         'guan-match-dark-orange
+                         'guan-match-brown
+                         'guan-match-deep-sky-blue 'reb-match-0))
+(setq color-candinates-length (length color-candinates))
+(setq use-color-position 0)
+
+(defun guan/--color-from-candinates ()
+  "Extract color in cycle"
+  (if (< use-color-position color-candinates-length)
+      (let ((position use-color-position))
+        (setq use-color-position (+ 1 use-color-position))
+        (nth position color-candinates))
+      (progn
+        (setq use-color-position 1)
+        (nth 0 color-candinates))
+    ))
+
+(defun guan/--is-valid-regexp (regexp)
+  (cond ((null regexp) nil)
+        ((string-match regexp "") nil)
+        (t regexp)))
+
+(defun guan/--un-highlight-regexp (regexp)
+  (unhighlight-regexp regexp))
+
+(defun guan/--highlight-regexp (regexp)
+  (let ((face (guan/--color-from-candinates)))
+    (unless hi-lock-mode (hi-lock-mode 1))
+    (hi-lock-set-pattern
+     regexp face nil nil
+     (if (and case-fold-search search-upper-case)
+         (isearch-no-upper-case-p regexp t)
+       case-fold-search))))
+
+;;;###autoload
+(defun guan/toggle-highlight-symbol-at-point ()
+  "Toggle highlight symbol at point"
+  (interactive)
+  (let* ((regexp (guan/--is-valid-regexp (find-tag-default-as-symbol-regexp)))
+         (existed-regexp-list (mapcar (lambda (pattern)
+                   (or (car (rassq pattern hi-lock-interactive-lighters))
+                             (car pattern)))
+                 hi-lock-interactive-patterns)))
+    (if regexp
+        (if (and existed-regexp-list (member regexp existed-regexp-list))
+            (guan/--un-highlight-regexp regexp)
+            (guan/--highlight-regexp regexp))
+        (display-message-or-buffer "invalid symbol"))
+    ))
+
+;;;###autoload
+(defun guan/un-highlight-all-symbols ()
+  "Un-Highlight all symbols"
+  (interactive)
+  (hi-lock-unface-buffer t))
+
 (map! :leader
 
       :desc "Find file from here"  "SPC"  #'find-file
+      :desc "Toggle highlight symbol at point"  "k"  #'guan/toggle-highlight-symbol-at-point
 
       (:prefix-map ("f" . "file")
        :desc "Search project"  "w"  #'+default/search-project
@@ -120,7 +186,8 @@
       )
 
 
-;; high priority config
+
+;; high priority config ---- end --------------------------
 (setq private-custom-file "~/.config/doom/private/custom.el")
 (if (file-exists-p private-custom-file)
     (load private-custom-file) nil)
