@@ -133,7 +133,9 @@
 ;; map f, F
 (evil-define-key '(normal motion) evil-snipe-override-local-mode-map
   "f" 'evil-avy-goto-char-in-line
-  "F" 'evil-avy-goto-char-in-line)
+  "F" 'evil-avy-goto-char-in-line
+  "t" 'evil-avy-goto-char-in-line
+  "T" 'evil-avy-goto-char-in-line)
 
 (map! :n "C-t" nil)
 (define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward-swap)
@@ -223,6 +225,10 @@
        :desc "Find file from workspace"  "f"  #'+default/find-file-under-here
        :desc "Find file from here"  "F"  #'find-file
        :desc "Search current directory"  "d"  #'+default/search-cwd)
+
+      (:prefix-map ("w" . "workspaces/windows")
+       :desc "Select from multi windows"  "s"  #'ace-window)
+
       )
 
 (map!
