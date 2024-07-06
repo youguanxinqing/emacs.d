@@ -145,12 +145,12 @@
 
 (setq color-candinates '('guan-match-light-green
                          'guan-match-green-yellow
-                         'guan-match-gold
+                         'guan-match-yellow
                          'guan-match-salmon
                          'guan-match-medium-violet-red
                          'guan-match-dark-orange
                          'guan-match-brown
-                         'guan-match-deep-sky-blue 'reb-match-0))
+                         'guan-match-deep-sky-blue))
 (setq color-candinates-length (length color-candinates))
 (setq use-color-position 0)
 

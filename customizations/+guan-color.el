@@ -25,13 +25,13 @@
   "Used for multi highlight symbols."
   :group 're-builder)
 
-(defface guan-match-gold
+(defface guan-match-yellow
   '((((class color) (background light))
      :foreground "#000000"
-     :background "#FFD700")
+     :background "#FFFF00")
     (((class color) (background dark))
      :foreground "#000000"
-     :background "#FFD700")
+     :background "#FFFF00")
     (t
      :inverse-video t))
   "Used for multi highlight symbols."
