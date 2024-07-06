@@ -56,7 +56,6 @@
 )
 
 
-(package! fnm
-  :recipe (:host github
-           :repo "bobrowadam/fnm.el"))
-
+;; (package! fnm
+;;   :recipe (:host github
+;;            :repo "bobrowadam/fnm.el"))
