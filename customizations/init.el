@@ -4,7 +4,38 @@
 
 (load "+guan-color.el")
 ;; font --------- start
-(setq doom-font (font-spec :size 22))
+(setq doom-font (font-spec :size 21))
+
+;; banner
+
+(defun banner-of-guan ()
+   (let* ((banner '(
+    "          ▀████▀▄▄              ▄█ "
+    "            █▀    ▀▀▄▄▄▄▄    ▄▄▀▀█ "
+    "    ▄        █          ▀▀▀▀▄  ▄▀  "
+    "   ▄▀ ▀▄      ▀▄              ▀▄▀  "
+    "  ▄▀    █     █▀   ▄█▀▄      ▄█    "
+    "  ▀▄     ▀▄  █     ▀██▀     ██▄█   "
+    "   ▀▄    ▄▀ █   ▄██▄   ▄  ▄  ▀▀ █  "
+    "    █  ▄▀  █    ▀██▀    ▀▀ ▀▀  ▄▀  "
+    "   █   █  █      ▄▄           ▄▀   by guan "
+    "                                   "
+    "                                   "
+    "      Don't mind not knowing.      "
+    "                                   "
+                  ))
+         (longest-line (apply #'max (mapcar #'length banner))))
+    (put-text-property
+     (point)
+     (dolist (line banner (point))
+       (insert (+doom-dashboard--center
+                +doom-dashboard--width
+                (concat line (make-string (max 0 (- longest-line (length line))) 32)))
+               "\n"))
+     'face 'doom-dashboard-banner)))
+(setq +doom-dashboard-ascii-banner-fn #'banner-of-guan)
+
+;;
 
 (defun guan/--font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
@@ -177,6 +208,7 @@
 
       :desc "Find file from here"  "SPC"  #'find-file
       :desc "Toggle highlight symbol at point"  "k"  #'guan/toggle-highlight-symbol-at-point
+      :desc "Locate file on treemacs sider" "e" #'treemacs-find-file
 
       (:prefix-map ("f" . "file")
        :desc "Search project"  "w"  #'+default/search-project
