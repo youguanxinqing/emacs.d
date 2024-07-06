@@ -204,6 +204,14 @@
   (interactive)
   (hi-lock-unface-buffer t))
 
+;;;###autoload
+(evil-define-operator guan/evilnc-comment-operator (start end type)
+  (cond ((string-equal type 'inclusive)
+           (let* ((start (progn (goto-char start) (line-beginning-position)))
+                  (end (progn (goto-char end) (line-end-position))))
+             (evilnc-comment-operator start end type)))
+        (t (evilnc-comment-operator start end type))))
+
 (map! :leader
 
       :desc "Find file from here"  "SPC"  #'find-file
@@ -216,6 +224,9 @@
        :desc "Find file from here"  "F"  #'find-file
        :desc "Search current directory"  "d"  #'+default/search-cwd)
       )
+
+(map!
+      :nv "gc" #'guan/evilnc-comment-operator)
 
 
 
