@@ -55,6 +55,23 @@
            :files ("*.el" "Makefile" "lib.c"))
 )
 
+;; (package! blink-search
+;;   :recipe (:host github
+;;            :repo "manateelazycat/blink-search"
+;;            :files ("*"))
+;; )
+
+(package! embark
+  :recipe (:host github
+           :repo "oantolin/embark"
+           :files ("*"))
+)
+
+(package! marginalia
+  :recipe (:host github
+           :repo "minad/marginalia"
+           :files ("*"))
+)
 
 ;; (package! fnm
 ;;   :recipe (:host github
