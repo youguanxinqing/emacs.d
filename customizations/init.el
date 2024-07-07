@@ -261,6 +261,20 @@
              (evilnc-comment-operator start end type)))
         (t (evilnc-comment-operator start end type))))
 
+;;;###autoload
+(require 'treemacs)
+(defun guan/toggle-treemacs ()
+  "Toggle treemacs and locate current position"
+  (interactive)
+  (let ((buffer (current-buffer))
+        (state (treemacs-current-visibility)))
+    (cond ((or (string-equal state "none") (string-equal state "exists"))
+             (progn (+treemacs/toggle)
+                    (switch-to-buffer buffer)
+                    (treemacs-find-file)))
+          (t (+treemacs/toggle)))))
+
+
 (map! :leader
 
       :desc "Find file from here"  "SPC"  #'find-file
@@ -285,6 +299,10 @@
 
       (:prefix-map ("q" . "quit/restart")
        :desc "Quit Emacs"  "a"  #'evil-quit-all)
+
+      (:prefix-map ("o" . "open")
+       (:when (modulep! :ui treemacs)
+        :desc "Project sidebar"  "p"  #'guan/toggle-treemacs))
 
       )
 
