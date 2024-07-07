@@ -250,7 +250,10 @@
        :desc "Search current directory"  "d"  #'+default/search-cwd)
 
       (:prefix-map ("w" . "workspaces/windows")
-       :desc "Select from multi windows"  "s"  #'ace-window)
+       :desc "Select from multi windows"  "s"  #'ace-window
+       :desc "Enlargen current window"  "o"  #'doom/window-enlargen
+       :desc "Normalize window size"  "n"  #'balance-windows
+       :desc "Swap window"  "w"  #'ace-swap-window)
 
       (:prefix-map ("c" . "code")
        :desc "Pop up scratch from buffer"  "n"  #'doom/open-scratch-buffer)
