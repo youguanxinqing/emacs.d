@@ -6,6 +6,15 @@
 ;; font --------- start
 (setq doom-font (font-spec :size 21))
 
+
+(defface custom-line-highlight '((t (:background "#8FBC8F" :foreground "#000000" :extend t))) "")
+(add-hook
+ 'treemacs-mode-hook
+ (defun channge-hl-line-mode ()
+   (setq-local hl-line-face 'custom-line-highlight)
+   (overlay-put hl-line-overlay 'face hl-line-face)
+   ))
+
 ;; banner
 
 (defun banner-of-guan ()
@@ -110,6 +119,22 @@
 ;; font --------- end
 
 (setq rustic-lsp-server 'rust-analyzer)
+
+
+;; lsp treemacs symbol ----- start
+
+(defun guan/--kill-lsp-treemacs-symbols-buffer ()
+  "Kill symbols view"
+  (if-let (buf (get-buffer lsp-treemacs-symbols-buffer-name))
+      (kill-buffer buf)))
+
+;;;###autoload
+(defun guan/toggle-symbols-outline ()
+  "Toggle symbols view"
+  (interactive)
+  (let ((buf (get-buffer lsp-treemacs-symbols-buffer-name)))
+    (cond ((null buf) (lsp-treemacs-symbols))
+          (t (guan/--kill-lsp-treemacs-symbols-buffer)))))
 
 ;; rime ----------- start
 (defun guan/--get-input-method (action)
