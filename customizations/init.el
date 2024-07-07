@@ -241,6 +241,7 @@
       :desc "Find file from here"  "SPC"  #'find-file
       :desc "Toggle highlight symbol at point"  "k"  #'guan/toggle-highlight-symbol-at-point
       :desc "Locate file on treemacs sider" "e" #'treemacs-find-file
+      :desc "Kill buffer"  "x"  #'kill-current-buffer
 
       (:prefix-map ("f" . "file")
        :desc "Search project"  "w"  #'+default/search-project
@@ -250,6 +251,12 @@
 
       (:prefix-map ("w" . "workspaces/windows")
        :desc "Select from multi windows"  "s"  #'ace-window)
+
+      (:prefix-map ("c" . "code")
+       :desc "Pop up scratch from buffer"  "n"  #'doom/open-scratch-buffer)
+
+      (:prefix-map ("q" . "quit/restart")
+       :desc "Quit Emacs"  "a"  #'evil-quit-all)
 
       )
 
