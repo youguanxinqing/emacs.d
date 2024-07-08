@@ -151,13 +151,13 @@
   "switch input method: english or chinese"
   (interactive)
   (rime-inline-ascii)
-  (rime--message-display-content (guan/--get-input-method "switch")))
+  (message (guan/--get-input-method "switch")))
 
 ;;;###autoload
 (defun guan/show-input-method ()
   "show rime current input method"
   (interactive)
-  (rime--message-display-content (guan/--get-input-method "show")))
+  (message (guan/--get-input-method "show")))
 
 (use-package! rime
   :defer 2
@@ -166,6 +166,11 @@
         rime-show-candidate 'posframe)
   (global-set-key (kbd "C-x C-d") 'toggle-input-method)
   (global-set-key (kbd "M-j") 'guan/switch-input-method))
+
+(add-hook 'minibuffer-setup-hook (lambda ()
+                                   (activate-input-method "rime")
+                                   (if (not (rime--ascii-mode-p))
+                                        (rime-inline-ascii))))
 
 ;; rime ----------- end
 
