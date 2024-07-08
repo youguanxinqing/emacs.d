@@ -274,6 +274,17 @@
                     (treemacs-find-file)))
           (t (+treemacs/toggle)))))
 
+;;;###autoload
+(defun guan/ace-swap-window ()
+  "Swap window."
+  (interactive)
+  (let ((this-window (selected-window)))
+    (ace-swap-window)
+    (dolist (window (window-list))
+      (if (eq this-window window)
+          (select-window window) nil))
+    ))
+
 
 (map! :leader
 
@@ -292,7 +303,7 @@
        :desc "Select from multi windows"  "s"  #'ace-window
        :desc "Enlargen current window"  "o"  #'doom/window-enlargen
        :desc "Normalize window size"  "n"  #'balance-windows
-       :desc "Swap window"  "w"  #'ace-swap-window)
+       :desc "Swap window"  "w"  #'guan/ace-swap-window)
 
       (:prefix-map ("c" . "code")
        :desc "Pop up scratch from buffer"  "n"  #'doom/open-scratch-buffer)
