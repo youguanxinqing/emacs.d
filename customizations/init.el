@@ -286,6 +286,15 @@
     ))
 
 
+;;;###autoload
+(defun guan/vsplit-and-goto-definition ()
+  "Vsplit, then goto definition"
+  (interactive)
+  (let ((new-window (split-window-right)))
+    (select-window new-window)
+    (+lookup/definition (symbol-at-point))))
+
+
 (map! :leader
 
       :desc "Find file from here"  "SPC"  #'find-file
@@ -316,11 +325,15 @@
         :desc "Project sidebar"  "p"  #'guan/toggle-treemacs))
 
       )
-
 (map!
       :nv "gc" #'guan/evilnc-comment-operator)
 
 
+(define-key evil-window-map "v" '+evil/window-vsplit-and-follow)
+(define-key evil-window-map "V" 'evil-window-vsplit)
+(define-key evil-window-map "s" '+evil/window-split-and-follow)
+(define-key evil-window-map "S" 'evil-window-split)
+(define-key evil-window-map "\C-]" 'guan/vsplit-and-goto-definition)
 
 ;; high priority config ---- end --------------------------
 (setq private-custom-file "~/.config/doom/private/custom.el")
