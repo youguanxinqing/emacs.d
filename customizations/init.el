@@ -290,7 +290,6 @@
           (select-window window) nil))
     ))
 
-
 ;;;###autoload
 (defun guan/vsplit-and-goto-definition ()
   "Vsplit, then goto definition"
@@ -299,6 +298,18 @@
     (select-window new-window)
     (+lookup/definition (symbol-at-point))))
 
+;;;###autoload
+(defun guan/window-enlargen ()
+  "Enlargen the current window and shrinks others."
+  (interactive)
+  (let ((this-window (selected-window)))
+      (dolist (window (window-list))
+        (if (not (eq this-window window))
+            (progn
+                (select-window window)
+                (beginning-of-line))))
+      (select-window this-window)
+      (doom/window-enlargen)))
 
 (map! :leader
 
@@ -315,7 +326,7 @@
 
       (:prefix-map ("w" . "workspaces/windows")
        :desc "Select from multi windows"  "s"  #'ace-window
-       :desc "Enlargen current window"  "o"  #'doom/window-enlargen
+       :desc "Enlargen current window"  "o"  #'guan/window-enlargen
        :desc "Normalize window size"  "n"  #'balance-windows
        :desc "Swap window"  "w"  #'guan/ace-swap-window)
 
@@ -339,6 +350,7 @@
 (define-key evil-window-map "s" '+evil/window-split-and-follow)
 (define-key evil-window-map "S" 'evil-window-split)
 (define-key evil-window-map "\C-]" 'guan/vsplit-and-goto-definition)
+(define-key evil-window-map "o" 'guan/window-enlargen)
 
 ;; high priority config ---- end --------------------------
 (setq private-custom-file "~/.config/doom/private/custom.el")
