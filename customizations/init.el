@@ -307,7 +307,7 @@
         (if (not (eq this-window window))
             (progn
                 (select-window window)
-                (beginning-of-line))))
+                (forward-line 0))))
       (select-window this-window)
       (doom/window-enlargen)))
 
