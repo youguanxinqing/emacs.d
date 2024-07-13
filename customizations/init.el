@@ -70,7 +70,7 @@
 
 (defun guan/enable-auto-set-font ()
   (when (display-graphic-p)
-   (cl-loop for font in '("Source Code Pro" "Fira Code"
+   (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
                           "Menlo" "Monaco" "Dejavu Sans Mono"
                            "Lucida Console" "Consolas" "SAS Monospace")
            when (guan/--font-installed-p font)
@@ -79,7 +79,7 @@
                    :font (font-spec :family font
                                    :weight 'normal
                                    :slant 'normal
-                                   :size (cond ((eq system-type 'gnu/linux) 14.0)
+                                   :size (cond ((eq system-type 'gnu/linux) 17.5)
                                                 ((eq system-type 'darwin) 20.0)
                                                 ((eq system-type 'windows-nt) 12.5)))))
    (cl-loop for font in '("OpenSansEmoji" "Noto Color Emoji" "Segoe UI Emoji"
@@ -101,7 +101,7 @@
                                    (font-spec :name font
                                            :weight 'normal
                                            :slant 'normal
-                                           :size (cond ((eq system-type 'gnu/linux) 14.0)
+                                           :size (cond ((eq system-type 'gnu/linux) 16.5)
                                                        ((eq system-type 'darwin) 20.0)
                                                        ((eq system-type 'windows-nt) 15.0)))))
    (cl-loop for font in '("HanaMinB" "SimSun-ExtB")
@@ -278,6 +278,18 @@
                     (switch-to-buffer buffer)
                     (treemacs-find-file)))
           (t (+treemacs/toggle)))))
+
+;;;###autoload
+(defun guan/treemacs-find-file ()
+  "Find file in sider and switch to the window."
+  (interactive)
+  (treemacs-find-file)
+  (let ((state (treemacs-current-visibility)))
+    (if (not (string-equal state "visible"))
+        (guan/toggle-treemacs)
+        nil)
+    (select-window (treemacs-get-local-window))
+    ))
 
 ;;;###autoload
 (defun guan/ace-swap-window ()
