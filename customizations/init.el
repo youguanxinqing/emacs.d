@@ -167,10 +167,12 @@
   (global-set-key (kbd "C-x C-d") 'toggle-input-method)
   (global-set-key (kbd "M-j") 'guan/switch-input-method))
 
-(add-hook 'minibuffer-setup-hook (lambda ()
-                                   (activate-input-method "rime")
-                                   (if (not (rime--ascii-mode-p))
-                                        (rime-inline-ascii))))
+;; dont hook on macos
+(if (not (eq system-type 'darwin))
+     (add-hook 'minibuffer-setup-hook (lambda ()
+                                     (activate-input-method "rime")
+                                     (if (not (rime--ascii-mode-p))
+                                             (rime-inline-ascii)))))
 
 ;; rime ----------- end
 
