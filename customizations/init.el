@@ -15,6 +15,9 @@
    (overlay-put hl-line-overlay 'face hl-line-face)
    ))
 
+(setq +format-on-save-enabled-modes
+      '(go-mode rust-mode))
+
 ;; banner
 
 (defun banner-of-guan ()
