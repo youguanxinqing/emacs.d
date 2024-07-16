@@ -13,6 +13,7 @@
  (defun channge-hl-line-mode ()
    (setq-local hl-line-face 'custom-line-highlight)
    (overlay-put hl-line-overlay 'face hl-line-face)
+
    ))
 
 (setq +format-on-save-enabled-modes
@@ -21,21 +22,21 @@
 ;; banner
 
 (defun banner-of-guan ()
-   (let* ((banner '(
-    "          ▀████▀▄▄              ▄█ "
-    "            █▀    ▀▀▄▄▄▄▄    ▄▄▀▀█ "
-    "    ▄        █          ▀▀▀▀▄  ▄▀  "
-    "   ▄▀ ▀▄      ▀▄              ▀▄▀  "
-    "  ▄▀    █     █▀   ▄█▀▄      ▄█    "
-    "  ▀▄     ▀▄  █     ▀██▀     ██▄█   "
-    "   ▀▄    ▄▀ █   ▄██▄   ▄  ▄  ▀▀ █  "
-    "    █  ▄▀  █    ▀██▀    ▀▀ ▀▀  ▄▀  "
-    "   █   █  █      ▄▄           ▄▀   by guan "
-    "                                   "
-    "                                   "
-    "      Don't mind not knowing.      "
-    "                                   "
-                  ))
+  (let* ((banner '(
+                   "          ▀████▀▄▄              ▄█ "
+                   "            █▀    ▀▀▄▄▄▄▄    ▄▄▀▀█ "
+                   "    ▄        █          ▀▀▀▀▄  ▄▀  "
+                   "   ▄▀ ▀▄      ▀▄              ▀▄▀  "
+                   "  ▄▀    █     █▀   ▄█▀▄      ▄█    "
+                   "  ▀▄     ▀▄  █     ▀██▀     ██▄█   "
+                   "   ▀▄    ▄▀ █   ▄██▄   ▄  ▄  ▀▀ █  "
+                   "    █  ▄▀  █    ▀██▀    ▀▀ ▀▀  ▄▀  "
+                   "   █   █  █      ▄▄           ▄▀   by guan "
+                   "                                   "
+                   "                                   "
+                   "      Don't mind not knowing.      "
+                   "                                   "
+                   ))
          (longest-line (apply #'max (mapcar #'length banner))))
     (put-text-property
      (point)
@@ -54,12 +55,12 @@
   (dolist (path search-paths)
     (if (not (member path exec-path))
         (add-to-list 'exec-path path)
-        nil))
+      nil))
   (let ((path-list (string-split (getenv "PATH") ":")))
     (dolist (path search-paths)
-        (if (not (member path path-list))
-                (push path path-list )
-                nil))
+      (if (not (member path path-list))
+          (push path path-list )
+        nil))
     (setenv "PATH" (string-join path-list ":")))
   )
 (set-env-path (string-split (shell-command-to-string "printenv PATH") ":"))
@@ -73,50 +74,50 @@
 
 (defun guan/enable-auto-set-font ()
   (when (display-graphic-p)
-   (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
-                          "Menlo" "Monaco" "Dejavu Sans Mono"
+    (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
+                           "Menlo" "Monaco" "Dejavu Sans Mono"
                            "Lucida Console" "Consolas" "SAS Monospace")
-           when (guan/--font-installed-p font)
-           return (set-face-attribute
-                   'default nil
-                   :font (font-spec :family font
-                                   :weight 'normal
-                                   :slant 'normal
-                                   :size (cond ((eq system-type 'gnu/linux) 17.5)
-                                                ((eq system-type 'darwin) 20.0)
-                                                ((eq system-type 'windows-nt) 12.5)))))
-   (cl-loop for font in '("OpenSansEmoji" "Noto Color Emoji" "Segoe UI Emoji"
+             when (guan/--font-installed-p font)
+             return (set-face-attribute
+                     'default nil
+                     :font (font-spec :family font
+                                      :weight 'normal
+                                      :slant 'normal
+                                      :size (cond ((eq system-type 'gnu/linux) 17.5)
+                                                  ((eq system-type 'darwin) 20.0)
+                                                  ((eq system-type 'windows-nt) 12.5)))))
+    (cl-loop for font in '("OpenSansEmoji" "Noto Color Emoji" "Segoe UI Emoji"
                            "EmojiOne Color" "Apple Color Emoji" "Symbola" "Symbol")
-           when (guan/--font-installed-p font)
-           return (set-fontset-font t 'unicode
-                                   (font-spec :family font
-                                           :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                       ((eq system-type 'darwin) 20.0)
-                                                       ((eq system-type 'windows-nt) 15.0)))
-                                   nil 'prepend))
-   (cl-loop for font in '("LXGWWenKaiScreen" "LXGWWenKaiMonoScreen" "LXGWWenKaiMonoGBScreen"
-                          "noto-fonts-cjk" "思源黑体 CN" "思源宋体 CN" "微软雅黑 CN"
+             when (guan/--font-installed-p font)
+             return (set-fontset-font t 'unicode
+                                      (font-spec :family font
+                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
+                                                             ((eq system-type 'darwin) 20.0)
+                                                             ((eq system-type 'windows-nt) 15.0)))
+                                      nil 'prepend))
+    (cl-loop for font in '("LXGWWenKaiScreen" "LXGWWenKaiMonoScreen" "LXGWWenKaiMonoGBScreen"
+                           "noto-fonts-cjk" "思源黑体 CN" "思源宋体 CN" "微软雅黑 CN"
                            "Source Han Sans CN" "Source Han Serif CN"
                            "WenQuanYi Micro Hei" "文泉驿等宽微米黑"
                            "Microsoft Yahei UI" "Microsoft Yahei")
-           when (guan/--font-installed-p font)
-           return (set-fontset-font t '(#x4e00 . #x9fff)
-                                   (font-spec :name font
-                                           :weight 'normal
-                                           :slant 'normal
-                                           :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                       ((eq system-type 'darwin) 20.0)
-                                                       ((eq system-type 'windows-nt) 15.0)))))
-   (cl-loop for font in '("HanaMinB" "SimSun-ExtB")
-        when (guan/--font-installed-p font)
-        return (set-fontset-font t '(#x20000 . #x2A6DF)
-                                (font-spec :name font
-                                        :weight 'normal
-                                        :slant 'normal
-                                        :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                    ((eq system-type 'darwin) 20.0)
-                                                    ((eq system-type 'windows-nt) 15.0))))))
-        )
+             when (guan/--font-installed-p font)
+             return (set-fontset-font t '(#x4e00 . #x9fff)
+                                      (font-spec :name font
+                                                 :weight 'normal
+                                                 :slant 'normal
+                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
+                                                             ((eq system-type 'darwin) 20.0)
+                                                             ((eq system-type 'windows-nt) 15.0)))))
+    (cl-loop for font in '("HanaMinB" "SimSun-ExtB")
+             when (guan/--font-installed-p font)
+             return (set-fontset-font t '(#x20000 . #x2A6DF)
+                                      (font-spec :name font
+                                                 :weight 'normal
+                                                 :slant 'normal
+                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
+                                                             ((eq system-type 'darwin) 20.0)
+                                                             ((eq system-type 'windows-nt) 15.0))))))
+  )
 (guan/enable-auto-set-font)
 
 ;; font --------- end
@@ -143,10 +144,10 @@
 (defun guan/--get-input-method (action)
   (cond ((string-equal action "switch") (if (rime--ascii-mode-p)
                                             "Rime: To English"
-                                            "Rime: To Chinese"))
+                                          "Rime: To Chinese"))
         ((string-equal action "show") (if (rime--ascii-mode-p)
                                           "Rime: English"
-                                          "Rime: Chinese"))
+                                        "Rime: Chinese"))
         ))
 
 ;;;###autoload
@@ -172,10 +173,10 @@
 
 ;; dont hook on macos
 (if (not (eq system-type 'darwin))
-     (add-hook 'minibuffer-setup-hook (lambda ()
-                                     (activate-input-method "rime")
-                                     (if (not (rime--ascii-mode-p))
-                                             (rime-inline-ascii)))))
+    (add-hook 'minibuffer-setup-hook (lambda ()
+                                       (activate-input-method "rime")
+                                       (if (not (rime--ascii-mode-p))
+                                           (rime-inline-ascii)))))
 
 ;; rime ----------- end
 
@@ -219,9 +220,9 @@
       (let ((position use-color-position))
         (setq use-color-position (+ 1 use-color-position))
         (nth position color-candinates))
-      (progn
-        (setq use-color-position 1)
-        (nth 0 color-candinates))
+    (progn
+      (setq use-color-position 1)
+      (nth 0 color-candinates))
     ))
 
 (defun guan/--is-valid-regexp (regexp)
@@ -247,14 +248,14 @@
   (interactive)
   (let* ((regexp (guan/--is-valid-regexp (find-tag-default-as-symbol-regexp)))
          (existed-regexp-list (mapcar (lambda (pattern)
-                   (or (car (rassq pattern hi-lock-interactive-lighters))
-                             (car pattern)))
-                 hi-lock-interactive-patterns)))
+                                        (or (car (rassq pattern hi-lock-interactive-lighters))
+                                            (car pattern)))
+                                      hi-lock-interactive-patterns)))
     (if regexp
         (if (and existed-regexp-list (member regexp existed-regexp-list))
             (guan/--un-highlight-regexp regexp)
-            (guan/--highlight-regexp regexp))
-        (display-message-or-buffer "invalid symbol"))
+          (guan/--highlight-regexp regexp))
+      (display-message-or-buffer "invalid symbol"))
     ))
 
 ;;;###autoload
@@ -266,9 +267,9 @@
 ;;;###autoload
 (evil-define-operator guan/evilnc-comment-operator (start end type)
   (cond ((string-equal type 'inclusive)
-           (let* ((start (progn (goto-char start) (line-beginning-position)))
-                  (end (progn (goto-char end) (line-end-position))))
-             (evilnc-comment-operator start end type)))
+         (let* ((start (progn (goto-char start) (line-beginning-position)))
+                (end (progn (goto-char end) (line-end-position))))
+           (evilnc-comment-operator start end type)))
         (t (evilnc-comment-operator start end type))))
 
 ;;;###autoload
@@ -279,9 +280,9 @@
   (let ((buffer (current-buffer))
         (state (treemacs-current-visibility)))
     (cond ((or (string-equal state "none") (string-equal state "exists"))
-             (progn (+treemacs/toggle)
-                    (switch-to-buffer buffer)
-                    (treemacs-find-file)))
+           (progn (+treemacs/toggle)
+                  (switch-to-buffer buffer)
+                  (treemacs-find-file)))
           (t (+treemacs/toggle)))))
 
 ;;;###autoload
@@ -292,7 +293,7 @@
   (let ((state (treemacs-current-visibility)))
     (if (not (string-equal state "visible"))
         (guan/toggle-treemacs)
-        nil)
+      nil)
     (select-window (treemacs-get-local-window))
     ))
 
@@ -320,13 +321,13 @@
   "Enlargen the current window and shrinks others."
   (interactive)
   (let ((this-window (selected-window)))
-      (dolist (window (window-list))
-        (if (not (eq this-window window))
-            (progn
-                (select-window window)
-                (forward-line 0))))
-      (select-window this-window)
-      (doom/window-enlargen)))
+    (dolist (window (window-list))
+      (if (not (eq this-window window))
+          (progn
+            (select-window window)
+            (forward-line 0))))
+    (select-window this-window)
+    (doom/window-enlargen)))
 
 (map! :leader
 
@@ -354,12 +355,13 @@
        :desc "Quit Emacs"  "a"  #'evil-quit-all)
 
       (:prefix-map ("o" . "open")
-       (:when (modulep! :ui treemacs)
-        :desc "Project sidebar"  "p"  #'guan/toggle-treemacs))
+                   (:when (modulep! :ui treemacs)
+                     :desc "Project sidebar"  "p"  #'guan/toggle-treemacs))
 
       )
 (map!
-      :nv "gc" #'guan/evilnc-comment-operator)
+ :nv "gc" #'guan/evilnc-comment-operator
+ :n "gr" #'+lookup/references)
 
 
 (define-key evil-window-map "v" '+evil/window-vsplit-and-follow)
