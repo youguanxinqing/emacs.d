@@ -6,7 +6,6 @@
 ;; font --------- start
 (setq doom-font (font-spec :size 21))
 
-
 (defface custom-line-highlight '((t (:background "#8FBC8F" :foreground "#000000" :extend t))) "")
 (add-hook
  'treemacs-mode-hook

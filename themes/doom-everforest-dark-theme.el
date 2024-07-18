@@ -80,6 +80,7 @@ Can be an integer to determine the exact padding."
    (purple     '("#d699b6" "#d699b6" "brightmagenta"))
    (cyan       '("#83c092" "#83c092" "brightcyan"   ))
    (dark-cyan  '("#83c092" "#83c092" "cyan"         ))
+   (comment-color  '("#808000" "#808000" "green"         ))
 
    ;; These are the "universal syntax classes" that doom-themes establishes.
    ;; These *must* be included in every doom themes, or your theme will throw an
@@ -88,10 +89,8 @@ Can be an integer to determine the exact padding."
    (vertical-bar   (doom-lighten bg 0.1))
    (selection      base5)
    (builtin        purple)
-   (comments       (if doom-everforest-dark-brighter-comments violet base5))
-   (doc-comments   (if doom-everforest-dark-brighter-comments
-                       (doom-lighten violet 0.1)
-                     (doom-lighten base5 0.25)))
+   (comments       comment-color)
+   (doc-comments   yellow)
    (constants      orange)
    (functions      green)
    (keywords       red)
@@ -191,7 +190,12 @@ Can be an integer to determine the exact padding."
    (rainbow-delimiters-depth-4-face :foreground cyan)
    (rainbow-delimiters-depth-5-face :foreground purple)
    (rainbow-delimiters-depth-6-face :foreground orange)
-   (rainbow-delimiters-depth-7-face :foreground green))
+   (rainbow-delimiters-depth-7-face :foreground green)
+
+   ;; avy
+   (avy-background-face :foreground base5)
+
+   )
 
   ;;;; Base theme variable overrides
   ;; ()
