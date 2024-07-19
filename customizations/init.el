@@ -3,10 +3,7 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 (load "+guan-color.el")
-;; font --------- start
-(setq doom-font (font-spec :size 21))
 
-(defface custom-line-highlight '((t (:background "#8FBC8F" :foreground "#000000" :extend t))) "")
 (add-hook
  'treemacs-mode-hook
  (defun channge-hl-line-mode ()
@@ -17,6 +14,7 @@
 
 (setq +format-on-save-enabled-modes
       '(go-mode rust-mode))
+(setq-hook! 'emacs-lisp-mode-hook +format-with-lsp nil)
 
 ;; banner
 
