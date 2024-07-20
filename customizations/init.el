@@ -368,6 +368,11 @@
 (define-key evil-window-map "\C-]" 'guan/vsplit-and-goto-definition)
 (define-key evil-window-map "o" 'guan/window-enlargen)
 
+(add-to-list 'load-path "~/.config/doom/customizations/utils")
+(add-to-list 'load-path "~/.config/doom/customizations/config")
+(dolist (module-name '("upload-server"))
+  (load (format "%s.el" module-name)))
+
 ;; high priority config ---- end --------------------------
 (setq private-custom-file "~/.config/doom/private/custom.el")
 (if (file-exists-p private-custom-file)
