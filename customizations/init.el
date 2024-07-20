@@ -370,7 +370,8 @@
 
 (add-to-list 'load-path "~/.config/doom/customizations/utils")
 (add-to-list 'load-path "~/.config/doom/customizations/config")
-(dolist (module-name '("upload-server"))
+(dolist (module-name '("upload-server"
+                       "run-anything"))
   (load (format "%s.el" module-name)))
 
 ;; high priority config ---- end --------------------------
