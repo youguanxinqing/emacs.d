@@ -52,8 +52,7 @@
 (package! rime
   :recipe (:host github
            :repo "DogLooksGood/emacs-rime"
-           :files ("*.el" "Makefile" "lib.c"))
-)
+           :files ("*.el" "Makefile" "lib.c")))
 
 ;; (package! blink-search
 ;;   :recipe (:host github
@@ -64,14 +63,17 @@
 (package! embark
   :recipe (:host github
            :repo "oantolin/embark"
-           :files ("*"))
-)
+           :files ("*")))
 
 (package! marginalia
   :recipe (:host github
            :repo "minad/marginalia"
-           :files ("*"))
-)
+           :files ("*")))
+
+(package! rainbow-mode
+  :recipe (:host github
+           :repo "emacsmirror/rainbow-mode"
+           :files ("*")))
 
 ;; (package! fnm
 ;;   :recipe (:host github
