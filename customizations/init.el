@@ -360,6 +360,8 @@
  :nv "gc" #'guan/evilnc-comment-operator
  :n "gr" #'+lookup/references)
 
+(global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "M-i") nil)
 
 (define-key evil-window-map "v" '+evil/window-vsplit-and-follow)
 (define-key evil-window-map "V" 'evil-window-vsplit)

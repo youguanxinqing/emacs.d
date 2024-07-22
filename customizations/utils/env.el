@@ -6,8 +6,9 @@
 (require 'f)
 (require 'io)
 
+;;; Code:
 (defun guan/with-pyenv (cmd)
-  "Add whole path for python if there is a .python-version file in root dir."
+  "Add whole path for python CMD if there is a .python-version file in root dir."
   (let* ((pyenv-path "~/.pyenv/versions/")
          (version-file ".python-version")
          (version-file-abspath (concat (guan/project-root-dir-abspath) "/" version-file)))
@@ -25,4 +26,4 @@
 
 
 (provide 'env)
-;;; path.el ends here
+;;; env.el ends here
