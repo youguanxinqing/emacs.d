@@ -69,52 +69,48 @@
   (find-font (font-spec :name font-name)))
 ;; (guan/--font-installed-p "LXGWWenKaiMonoScreen")
 
-(defun guan/enable-auto-set-font ()
-  (when (display-graphic-p)
-    (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
-                           "Menlo" "Monaco" "Dejavu Sans Mono"
-                           "Lucida Console" "Consolas" "SAS Monospace")
-             when (guan/--font-installed-p font)
-             return (set-face-attribute
-                     'default nil
-                     :font (font-spec :family font
-                                      :weight 'normal
-                                      :slant 'normal
-                                      :size (cond ((eq system-type 'gnu/linux) 17.5)
-                                                  ((eq system-type 'darwin) 20.0)
-                                                  ((eq system-type 'windows-nt) 12.5)))))
-    (cl-loop for font in '("OpenSansEmoji" "Noto Color Emoji" "Segoe UI Emoji"
-                           "EmojiOne Color" "Apple Color Emoji" "Symbola" "Symbol")
-             when (guan/--font-installed-p font)
-             return (set-fontset-font t 'unicode
-                                      (font-spec :family font
-                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                             ((eq system-type 'darwin) 20.0)
-                                                             ((eq system-type 'windows-nt) 15.0)))
-                                      nil 'prepend))
-    (cl-loop for font in '("LXGWWenKaiScreen" "LXGWWenKaiMonoScreen" "LXGWWenKaiMonoGBScreen"
-                           "noto-fonts-cjk" "思源黑体 CN" "思源宋体 CN" "微软雅黑 CN"
-                           "Source Han Sans CN" "Source Han Serif CN"
-                           "WenQuanYi Micro Hei" "文泉驿等宽微米黑"
-                           "Microsoft Yahei UI" "Microsoft Yahei")
-             when (guan/--font-installed-p font)
-             return (set-fontset-font t '(#x4e00 . #x9fff)
-                                      (font-spec :name font
-                                                 :weight 'normal
-                                                 :slant 'normal
-                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                             ((eq system-type 'darwin) 20.0)
-                                                             ((eq system-type 'windows-nt) 15.0)))))
-    (cl-loop for font in '("HanaMinB" "SimSun-ExtB")
-             when (guan/--font-installed-p font)
-             return (set-fontset-font t '(#x20000 . #x2A6DF)
-                                      (font-spec :name font
-                                                 :weight 'normal
-                                                 :slant 'normal
-                                                 :size (cond ((eq system-type 'gnu/linux) 16.5)
-                                                             ((eq system-type 'darwin) 20.0)
-                                                             ((eq system-type 'windows-nt) 15.0))))))
-  )
+(defun guan/enable-auto-set-font (&optional font-size1 font-size2 font-size3 font-size4)
+  (let ((font-size1 (if (equal nil font-size1) 14.5 font-size1))
+        (font-size2 (if (equal nil font-size2) 14.5 font-size2))
+        (font-size3 (if (equal nil font-size3) 14.5 font-size3))
+        (font-size4 (if (equal nil font-size4) 14.5 font-size4)))
+    (when (display-graphic-p)
+      (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
+                             "Menlo" "Monaco" "Dejavu Sans Mono"
+                             "Lucida Console" "Consolas" "SAS Monospace")
+               when (guan/--font-installed-p font)
+               return (set-face-attribute
+                       'default nil
+                       :font (font-spec :family font
+                                        :weight 'normal
+                                        :slant 'normal
+                                        :size  font-size1)))
+      (cl-loop for font in '("OpenSansEmoji" "Noto Color Emoji" "Segoe UI Emoji"
+                             "EmojiOne Color" "Apple Color Emoji" "Symbola" "Symbol")
+               when (guan/--font-installed-p font)
+               return (set-fontset-font t 'unicode
+                                        (font-spec :family font
+                                                   :size font-size2)
+                                        nil 'prepend))
+      (cl-loop for font in '("LXGWWenKaiMonoScreen" "LXGWWenKaiMonoGBScreen"
+                             "noto-fonts-cjk" "思源黑体 CN" "思源宋体 CN" "微软雅黑 CN"
+                             "Source Han Sans CN" "Source Han Serif CN"
+                             "WenQuanYi Micro Hei" "文泉驿等宽微米黑"
+                             "Microsoft Yahei UI" "Microsoft Yahei")
+               when (guan/--font-installed-p font)
+               return (set-fontset-font t '(#x4e00 . #x9fff)
+                                        (font-spec :name font
+                                                   :weight 'normal
+                                                   :slant 'normal
+                                                   :size font-size3)))
+      (cl-loop for font in '("HanaMinB" "SimSun-ExtB")
+               when (guan/--font-installed-p font)
+               return (set-fontset-font t '(#x20000 . #x2A6DF)
+                                        (font-spec :name font
+                                                   :weight 'normal
+                                                   :slant 'normal
+                                                   :size font-size4)))
+      )))
 (guan/enable-auto-set-font)
 
 ;; font --------- end
