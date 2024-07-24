@@ -2,6 +2,7 @@
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+(add-to-list 'load-path "~/.config/doom/customizations/utils")
 (load "+guan-color.el")
 
 (add-hook
@@ -366,10 +367,12 @@
 (define-key evil-window-map "\C-]" 'guan/vsplit-and-goto-definition)
 (define-key evil-window-map "o" 'guan/window-enlargen)
 
-(add-to-list 'load-path "~/.config/doom/customizations/utils")
+(require 'protobuf-mode)
+
 (add-to-list 'load-path "~/.config/doom/customizations/config")
 (dolist (module-name '("upload-server"
-                       "run-anything"))
+                       "run-anything"
+                       "grpc"))
   (load (format "%s.el" module-name)))
 
 ;; high priority config ---- end --------------------------

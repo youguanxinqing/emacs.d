@@ -17,9 +17,21 @@
   "Get absolute path of root directory under current project."
   (projectile-project-root))
 
-(defun guan/current-file-name ()
-  "Get name of current file."
-  ())
+
+(defun guan/current-filename ()
+  "Get current buffer filename."
+  (car (reverse (string-split (buffer-file-name) "/")))
+  )
+
+(defun guan/current-filename-ext ()
+  "Get file extension of current buffer."
+  (car (reverse (string-split (guan/current-filename) "\\.")))
+  )
+
+(defun guan/current-filename-without-ext ()
+  "Get name of current file with extension."
+  (s-replace (format ".%s" (guan/current-filename-ext)) "" (guan/current-filename))
+  )
 
 (defun guan/current-file-abspath ()
   "Get absolute path of current file."
@@ -29,6 +41,7 @@
   "Get relative path of current file."
   (s-replace (guan/project-root-dir-abspath) "" (guan/current-file-abspath))
   )
+
 
 (provide 'path)
 ;;; path.el ends here

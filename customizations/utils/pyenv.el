@@ -1,6 +1,6 @@
 ;;; package --- Summary -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;; customizations/utils/env.el
+;;; customizations/utils/pyenv.el
 
 (require 'path)
 (require 'f)
@@ -25,5 +25,5 @@
     ))
 
 
-(provide 'env)
-;;; env.el ends here
+(provide 'pyenv)
+;;; pyenv.el ends here
