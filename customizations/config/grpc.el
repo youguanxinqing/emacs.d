@@ -23,12 +23,13 @@
 
 
 (defun guan/--make-grpc-command (grpc-config)
-  (let ((includes-chunk (string-join (mapcar (lambda (item)
-                                               (format "-I=%s" item)
-                                               )
-                                             (cdr (assoc "includes" grpc-config))) " "))
-        (python-out-chunk (format "--python_out=%s" (cdr (assoc "python-out" grpc-config))))
-        (grpc-python-out-chunk (format "--grpc_python_out=%s" (cdr (assoc "python-out" grpc-config)))))
+  (let* (
+         (includes-chunk (string-join (mapcar (lambda (item) (format "-I=%s" item))
+                                              (append (cdr (assoc "includes" grpc-config))
+                                                      (list (guan/current-dir-abspath))))
+                                      " "))
+         (python-out-chunk (format "--python_out=%s" (cdr (assoc "python-out" grpc-config))))
+         (grpc-python-out-chunk (format "--grpc_python_out=%s" (cdr (assoc "python-out" grpc-config)))))
     (guan/with-pyenv (format "python -m grpc_tools.protoc %s %s %s %s"
                              includes-chunk
                              python-out-chunk
@@ -49,7 +50,7 @@
         (filename (guan/current-filename-without-ext)))
     (if (not (string-equal "proto" ext))
         (message (format "%s is not proto file" (guan/current-filename)))
-      (let ((grpc-config (assoc filename py-grpc-configs)))
+      (let ((grpc-config (assoc filename guan-py-grpc-configs)))
         (if (eq nil grpc-config)
             (message (format "not found \"%s\" config" filename))
           (print (guan/--make-grpc-command (cdr grpc-config)))

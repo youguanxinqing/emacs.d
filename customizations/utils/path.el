@@ -43,5 +43,10 @@
   )
 
 
+(defun guan/current-dir-abspath ()
+  "Get absolute path of current dir."
+  (s-replace (guan/current-filename) "" (guan/current-file-abspath)))
+
+
 (provide 'path)
 ;;; path.el ends here
