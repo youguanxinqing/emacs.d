@@ -15,11 +15,11 @@
 (defun guan-py-grpc-config (name item) `(,name . ,item))
 
 
-(defvar py-grpc-configs (list
-                         (guan-py-grpc-config
-                          "sec_third_server"
-                          (guan-py-grpc-item '("/tmp/" "/tmp/") "/tmp/" "/tmp/" (lambda () (print "after callback"))))
-                         ))
+(defvar guan-py-grpc-configs (list
+                              (guan-py-grpc-config
+                               "sec_third_server"
+                               (guan-py-grpc-item '("/tmp/" "/tmp/") "/tmp/" "/tmp/" (lambda () (print "after callback"))))
+                              ))
 
 
 (defun guan/--make-grpc-command (grpc-config)
