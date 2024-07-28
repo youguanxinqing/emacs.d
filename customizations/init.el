@@ -5,6 +5,13 @@
 (add-to-list 'load-path "~/.config/doom/customizations/utils")
 (load "+guan-color.el")
 
+(add-to-list 'load-path "~/.config/doom/customizations/config")
+(dolist (module-name '("upload-server"
+                       "run-anything"
+                       "grpc"
+                       "flash"))
+  (load (format "%s.el" module-name)))
+
 (add-hook
  'treemacs-mode-hook
  (defun channge-hl-line-mode ()
@@ -174,7 +181,7 @@
 
 ;; rime ----------- end
 
-(global-set-key (kbd "C-s") 'evil-avy-goto-char)
+(global-set-key (kbd "C-s") 'guan/flash-jump)
 
 
 ;; close evil-snipe-s
@@ -369,12 +376,6 @@
 
 (require 'protobuf-mode)
 
-(add-to-list 'load-path "~/.config/doom/customizations/config")
-(dolist (module-name '("upload-server"
-                       "run-anything"
-                       "grpc"
-                       "flash"))
-  (load (format "%s.el" module-name)))
 
 ;; high priority config ---- end --------------------------
 (setq private-custom-file "~/.config/doom/private/custom.el")
