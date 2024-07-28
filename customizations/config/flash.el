@@ -8,6 +8,10 @@
   '((t (:inherit highlight)))
   "Face for matches during reading chars using `avy-goto-char-timer'.")
 
+(defface guan-lead-face
+  '((t (:foreground "white" :background "#4f57f9")))
+  "Face used for first non-terminating leading chars.")
+
 (defcustom guan-del-last-char-by '(?\b ?\d)
   "List of event types, i.e. key presses, that delete the last
 character read.  The default represents `C-h' and `DEL'.  See
@@ -18,49 +22,97 @@ character read.  The default represents `C-h' and `DEL'.  See
 
 (defvar guan--overlays '())
 
-(defun guan/--toggle-grey-background ()
+;; guan--leader-keys: ((CHAR . POSITION))
+(setq guan--label-positions '())
+
+;; abcdefghijklmnopqrstuvwxyz
+(defvar guan-flash-labels '(
+                            ?a ?b ?c ?d ?e
+                            ?f ?g ?h ?i ?j
+                            ?k ?l ?m ?n ?o
+                            ?p ?q ?r ?s ?t
+                            ?u ?v ?w ?x ?y ?z
+                            ))
+
+(defun guan/--toggle-grey-background (&optional start end)
   (if (equal nil guan--overlay-state)
-      (let* ((beg (window-start))
-             (end (window-end))
+      (let* ((beg (if (equal nil start) (window-start) start))
+             (end (if (equal nil end) (window-end) end))
              (ov (make-overlay beg end (window-buffer))))
         (overlay-put ov 'face 'guan-background-face)
-        (setq guan--overlay-state ov))
+        (setq guan--overlay-state ov)
+        )
     (progn
       (delete-overlay guan--overlay-state)
       (setq guan--overlay-state nil)
-      (print guan--overlay-state)
       )
     )
   )
 
+;; (guan/--toggle-grey-background)
+
 (defun guan/--clear-all-highlights ()
   (when (< 0 (length guan--overlays))
     (dolist (ov guan--overlays)
-      (print ov)
       (delete-overlay ov))
     )
   (setq guan--overlays '()))
 
+;; search-and-hightlight
+;; CANDINATS
 (defun search-and-hightlight (text start end)
-  (save-excursion
-    (progn
-      (guan/--clear-all-highlights)
-      (goto-char start)
-      (while (re-search-forward text end t)
-        (let ((ov (make-overlay (- (point) (length text)) (point))))
-          (overlay-put ov 'face 'guan-highlight-face)
-          (push ov guan--overlays)
+  (let (candinats real-tails usable-labels
+                  tmp-label tmp-ov)
+    (save-excursion
+      (progn
+        (guan/--clear-all-highlights)
+        (setq guan--label-positions '())
+        (goto-char start)
+        ;; search all matches
+        (while (re-search-forward text end t)
+          (let* ((match-start (- (point) (length text)))
+                 (ov (make-overlay match-start (point)))
+                 (tail (char-after (point))))
+            (if (not (member tail real-tails))
+                (push tail real-tails))
+            (push (list match-start ov) candinats)
+            )
+          )
+        ;; final usable label set
+        (dolist (label guan-flash-labels)
+          (when (not (member label real-tails))
+            (push label usable-labels)))
+        ;; highlight search text
+        (let ((need-mark-label? (> (length usable-labels) (length candinats))))
+          (dolist (pos-ov candinats)
+            (setq tmp-ov (car (cdr pos-ov)))
+            (setq tmp-label (car usable-labels))
+            (overlay-put tmp-ov 'face 'guan-highlight-face)
+            (when need-mark-label?
+              (overlay-put tmp-ov 'after-string (propertize (char-to-string tmp-label) 'face 'guan-lead-face))
+              (setq usable-labels (delete tmp-label usable-labels))
+              (push (list tmp-label (car pos-ov)) guan--label-positions)
+              )
+            (push tmp-ov guan--overlays)
+            )
           )
         )
       )
     )
   )
 
+
+(defun guan/--clean-up ()
+  (guan/--toggle-grey-background)
+  (guan/--clear-all-highlights)
+  (setq guan--label-positions '())
+  )
+
 (defun live-grepper ()
   (let ((start-point (window-start))
         (end-point (window-end))
         (search-text "")
-        char break)
+        char break labels)
     (progn
       (guan/--toggle-grey-background)
       (while (and (not break)
@@ -73,19 +125,20 @@ character read.  The default represents `C-h' and `DEL'.  See
                                    t
                                    )
                         )
+
                   )
+        (setq labels (mapcar (lambda (one) (car one)) guan--label-positions))
         (cond
          ;; Handle ESC
          ((= char 27)
           (progn
-            (guan/--toggle-grey-background)
-            (guan/--clear-all-highlights)
-            (keyboard-quit)))
+            (guan/--clean-up)
+            (keyboard-quit))
+          )
          ;; Handle RET
          ((= char 13)
           (progn
-            (guan/--toggle-grey-background)
-            (guan/--clear-all-highlights)
+            (guan/--clean-up)
             (keyboard-quit)))
          ;; Handle C-h, DEL
          ((memq char guan-del-last-char-by)
@@ -96,23 +149,27 @@ character read.  The default represents `C-h' and `DEL'.  See
                     (guan/--clear-all-highlights))
                   ))
           )
+         ((memq char labels)
+          (progn
+            (goto-char (car (cdr (assoc char guan--label-positions))))
+            (guan/--clean-up)
+            (keyboard-quit)
+            )
+          )
          (t
           (progn
-            (setq search-text (concat search-text (list char)))
+            (setq search-text (concat search-text (char-to-string char)))
             ;; Highlight
             (when (> (length search-text) 0)
-              (search-and-hightlight search-text start-point end-point))
-            ))
+              (search-and-hightlight search-text start-point end-point)))
+          )
          ))
-      )))
+      )
+    ))
 
 
-;;;###autoload
 (defun guan/flash-jump ()
   (interactive)
-  (condition-case nil
-      (live-grepper)
-    (quit (progn
-            (guan/--toggle-grey-background)
-            (guan/--clear-all-highlights)
-            (keyboard-quit)))))
+  (live-grepper)
+  )
+
