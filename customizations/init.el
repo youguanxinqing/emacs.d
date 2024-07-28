@@ -372,7 +372,8 @@
 (add-to-list 'load-path "~/.config/doom/customizations/config")
 (dolist (module-name '("upload-server"
                        "run-anything"
-                       "grpc"))
+                       "grpc"
+                       "flash"))
   (load (format "%s.el" module-name)))
 
 ;; high priority config ---- end --------------------------
