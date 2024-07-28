@@ -49,8 +49,6 @@ character read.  The default represents `C-h' and `DEL'.  See
     )
   )
 
-;; (guan/--toggle-grey-background)
-
 (defun guan/--clear-all-highlights ()
   (when (< 0 (length guan--overlays))
     (dolist (ov guan--overlays)
@@ -130,16 +128,9 @@ character read.  The default represents `C-h' and `DEL'.  See
         (setq labels (mapcar (lambda (one) (car one)) guan--label-positions))
         (cond
          ;; Handle ESC
-         ((= char 27)
-          (progn
-            (guan/--clean-up)
-            (keyboard-quit))
-          )
+         ((= char 27) (keyboard-quit))
          ;; Handle RET
-         ((= char 13)
-          (progn
-            (guan/--clean-up)
-            (keyboard-quit)))
+         ((= char 13) (keyboard-quit))
          ;; Handle C-h, DEL
          ((memq char guan-del-last-char-by)
           (let ((l (length search-text)))
@@ -152,7 +143,6 @@ character read.  The default represents `C-h' and `DEL'.  See
          ((memq char labels)
           (progn
             (goto-char (car (cdr (assoc char guan--label-positions))))
-            (guan/--clean-up)
             (keyboard-quit)
             )
           )
@@ -170,6 +160,8 @@ character read.  The default represents `C-h' and `DEL'.  See
 
 (defun guan/flash-jump ()
   (interactive)
-  (live-grepper)
+  (condition-case nil
+      (live-grepper)
+    (t (guan/--clean-up))
+    )
   )
-
