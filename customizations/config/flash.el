@@ -57,10 +57,11 @@ character read.  The default represents `C-h' and `DEL'.  See
   (setq guan--overlays '()))
 
 ;; search-and-hightlight
-;; CANDINATS
+;; CANDIDATES '((MATCH-START . OV))
 (defun search-and-hightlight (text start end)
-  (let (candinats real-tails usable-labels
-                  tmp-label tmp-ov)
+  (let ((current-pos (point))
+        candidates real-tails usable-labels
+        tmp-label tmp-ov)
     (save-excursion
       (progn
         (guan/--clear-all-highlights)
@@ -73,32 +74,34 @@ character read.  The default represents `C-h' and `DEL'.  See
                  (tail (char-after (point))))
             (if (not (member tail real-tails))
                 (push tail real-tails))
-            (push (list match-start ov) candinats)
+            (push (list match-start ov) candidates)
             )
           )
+        ;; sort candidates by distance
+        (setq candidates (cl-sort candidates #'< :key (lambda (one-candidate) (abs (- current-pos (car one-candidate))))))
         ;; final usable label set
         (dolist (label guan-flash-labels)
           (when (not (member label real-tails))
             (push label usable-labels)))
         ;; highlight search text
-        (let ((need-mark-label? (> (length usable-labels) (length candinats))))
-          (dolist (pos-ov candinats)
-            (setq tmp-ov (car (cdr pos-ov)))
+        (while (> (length candidates) 0)
+          (setq tmp-ov (car (cdr (car candidates))))
+          (overlay-put tmp-ov 'face 'guan-highlight-face)
+          (push tmp-ov guan--overlays)
+          (when (> (length usable-labels) 0)
             (setq tmp-label (car usable-labels))
-            (overlay-put tmp-ov 'face 'guan-highlight-face)
-            (when need-mark-label?
-              (overlay-put tmp-ov 'after-string (propertize (char-to-string tmp-label) 'face 'guan-lead-face))
-              (setq usable-labels (delete tmp-label usable-labels))
-              (push (list tmp-label (car pos-ov)) guan--label-positions)
-              )
-            (push tmp-ov guan--overlays)
+            (overlay-put tmp-ov 'after-string (propertize (char-to-string tmp-label) 'face 'guan-lead-face))
+            (push (list tmp-label (car (car candidates))) guan--label-positions)
+            ;; delete one from usable-labels
+            (setq usable-labels (cdr usable-labels))
             )
+          ;; delete one from candidates
+          (setq candidates (cdr candidates))
           )
         )
       )
     )
   )
-
 
 (defun guan/--clean-up ()
   (guan/--toggle-grey-background)
