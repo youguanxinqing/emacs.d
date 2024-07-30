@@ -18,12 +18,20 @@ character read.  The default represents `C-h' and `DEL'.  See
 `event-convert-list'."
   :type 'list)
 
-(setq guan--overlay-state nil)
+(setq guan--grey-overlays nil)
 
 (defvar guan--overlays '())
 
-;; guan--leader-keys: ((CHAR . POSITION))
+;; guan--label-positions: ((LABEL WINDOW POSITION))
 (setq guan--label-positions '())
+
+(defun --extract-label-position (key label-position)
+  (cond ((string-equal key "label") (nth 0 label-position))
+        ((string-equal key "window") (nth 1 label-position))
+        ((string-equal key "position") (nth 2 label-position))))
+
+(defun --make-label-position (label position window)
+  `(,label ,position ,window))
 
 ;; abcdefghijklmnopqrstuvwxyz
 (defvar guan-flash-labels '(
@@ -35,16 +43,21 @@ character read.  The default represents `C-h' and `DEL'.  See
                             ))
 
 (defun guan/--toggle-grey-background (&optional start end)
-  (if (equal nil guan--overlay-state)
-      (let* ((beg (if (equal nil start) (window-start) start))
-             (end (if (equal nil end) (window-end) end))
-             (ov (make-overlay beg end (window-buffer))))
-        (overlay-put ov 'face 'guan-background-face)
-        (setq guan--overlay-state ov)
+  (if (> (length guan--grey-overlays) 0)
+      (while (> (length guan--grey-overlays) 0)
+        (delete-overlay (car guan--grey-overlays))
+        (setq guan--grey-overlays (cdr guan--grey-overlays))
         )
-    (progn
-      (delete-overlay guan--overlay-state)
-      (setq guan--overlay-state nil)
+    (dolist (window (--windows))
+      (save-window-excursion
+        (when (not (equal window (selected-window)))
+          (select-window window))
+        (let* ((beg (if (equal nil start) (window-start) start))
+               (end (if (equal nil end) (window-end) end))
+               (ov (make-overlay beg end (window-buffer))))
+          (overlay-put ov 'face 'guan-background-face)
+          (push ov guan--grey-overlays))
+        )
       )
     )
   )
@@ -56,51 +69,103 @@ character read.  The default represents `C-h' and `DEL'.  See
     )
   (setq guan--overlays '()))
 
+(defun --windows ()
+  (let (windows)
+    (save-window-excursion
+      (dolist (window (window-list))
+        (select-window window)
+        (unless (string-equal (buffer-name) "*Messages*")
+          (push window windows))))
+    windows
+    ))
+
+(defun --extract-candidate (key candidate)
+  (cond ((string-equal key "window") (nth 0 candidate))
+        ((string-equal key "position") (nth 1 candidate))
+        ((string-equal key "ov") (nth 2 candidate))))
+
+(defun --make-candidate (window position ov)
+  `(,window ,position ,ov))
+
 ;; search-and-hightlight
-;; CANDIDATES '((MATCH-START . OV))
-(defun search-and-hightlight (text start end)
+;; CANDIDATES '((WINDOW MATCH-START OV))
+(defun search-and-hightlight (text)
   (let ((current-pos (point))
-        candidates real-tails usable-labels
+        (focus-window (selected-window))
+        candidates duplicate-queue
+        real-tails usable-labels
         tmp-label tmp-ov)
     (save-excursion
-      (progn
-        (guan/--clear-all-highlights)
-        (setq guan--label-positions '())
-        (goto-char start)
-        ;; search all matches
-        (while (re-search-forward text end t)
-          (let* ((match-start (- (point) (length text)))
-                 (ov (make-overlay match-start (point)))
-                 (tail (char-after (point))))
-            (if (not (member tail real-tails))
-                (push tail real-tails))
-            (push (list match-start ov) candidates)
-            )
-          )
-        ;; sort candidates by distance
-        (setq candidates (cl-sort candidates #'< :key (lambda (one-candidate) (abs (- current-pos (car one-candidate))))))
-        ;; final usable label set
-        (dolist (label guan-flash-labels)
-          (when (not (member label real-tails))
-            (push label usable-labels)))
-        ;; highlight search text
-        (while (> (length candidates) 0)
-          (setq tmp-ov (car (cdr (car candidates))))
-          (overlay-put tmp-ov 'face 'guan-highlight-face)
-          (push tmp-ov guan--overlays)
-          (when (> (length usable-labels) 0)
-            (setq tmp-label (car usable-labels))
-            (overlay-put tmp-ov 'after-string (propertize (char-to-string tmp-label) 'face 'guan-lead-face))
-            (push (list tmp-label (car (car candidates))) guan--label-positions)
-            ;; delete one from usable-labels
-            (setq usable-labels (cdr usable-labels))
-            )
-          ;; delete one from candidates
-          (setq candidates (cdr candidates))
+      (save-window-excursion
+        (progn
+          (guan/--clear-all-highlights)
+          (setq guan--label-positions '())
+
+          (dolist (window (--windows))
+            (select-window window)
+
+            (goto-char (window-start))
+            ;; search all matches
+            (while (re-search-forward text (window-end) t)
+              (let* ((match-start (- (point) (length text)))
+                     (ov (make-overlay match-start (point)))
+                     (tail (char-after (point)))
+                     (uniq-key (format "%s-%d" (buffer-name) match-start)))
+                (if (not (member tail real-tails))
+                    (push tail real-tails))
+                (unless (or (and (eq match-start current-pos) (eq window focus-window))
+                            (member uniq-key duplicate-queue) )
+                  (push (--make-candidate (selected-window) match-start ov)  candidates)
+                  (push uniq-key  duplicate-queue))
+                )))
+          ;; sort candidates by distance
+          (setq candidates (cl-sort candidates
+                                    (lambda (a b)
+                                      (and (<= (nth 0 a) (nth 0 b))
+                                           (<= (nth 1 a) (nth 1 b))))
+                                    :key (lambda (one-candidate)
+                                           (list (--window-to-number focus-window (--extract-candidate "window" one-candidate))
+                                                 (abs (- current-pos (--extract-candidate "position" one-candidate)))))
+                                    ))
+          ;; final usable label set
+          (dolist (label guan-flash-labels)
+            (when (not (member label real-tails))
+              (push label usable-labels)))
+          ;; highlight search text
+          (while (> (length candidates) 0)
+            (setq tmp-ov (--extract-candidate "ov" (car candidates)))
+            (overlay-put tmp-ov 'face 'guan-highlight-face)
+            (overlay-put tmp-ov 'priority 999)
+            (push tmp-ov guan--overlays)
+            (when (> (length usable-labels) 0)
+              (setq tmp-label (car usable-labels))
+              (overlay-put tmp-ov 'after-string (propertize (char-to-string tmp-label) 'face 'guan-lead-face))
+              (push (--make-label-position tmp-label
+                                           (--extract-candidate "window" (car candidates))
+                                           (--extract-candidate "position" (car candidates)))
+                    guan--label-positions)
+              ;; delete one from usable-labels
+              (setq usable-labels (cdr usable-labels)))
+            ;; delete one from candidates
+            (setq candidates (cdr candidates)))
           )
         )
       )
     )
+  )
+
+;; window string format: #<window id on ...>
+;; return 0 if window that passed is current window
+(defun --window-to-number (current-window window)
+  (cond ((eq window current-window) 0)
+        (t (let (number)
+             (save-match-data
+               (and (string-match "#<window \\([0-9]+\\) on .*" (format "%s" (selected-window)))
+                    (setq number (match-string 1 (format "%s" (selected-window))))))
+             (string-to-number number)
+             )
+           )
+        )
   )
 
 (defun guan/--clean-up ()
@@ -110,9 +175,7 @@ character read.  The default represents `C-h' and `DEL'.  See
   )
 
 (defun live-grepper ()
-  (let ((start-point (window-start))
-        (end-point (window-end))
-        (search-text "")
+  (let ((search-text "")
         char break labels)
     (progn
       (guan/--toggle-grey-background)
@@ -139,22 +202,25 @@ character read.  The default represents `C-h' and `DEL'.  See
           (let ((l (length search-text)))
             (when (>= l 1) (setq search-text (substring search-text 0 (1- l)))
                   (if (> (length search-text) 0)
-                      (search-and-hightlight search-text start-point end-point)
+                      (search-and-hightlight search-text)
                     (guan/--clear-all-highlights))
                   ))
           )
          ((memq char labels)
-          (progn
-            (goto-char (car (cdr (assoc char guan--label-positions))))
+          (let* ((label-position (assoc char guan--label-positions))
+                 (target-window (--extract-label-position "window" label-position))
+                 (target-position (--extract-label-position "position" label-position)))
+            (when (not (eq (selected-window) target-window))
+              (select-window target-window))
+            (goto-char target-position)
             (keyboard-quit)
-            )
-          )
+            ))
          (t
           (progn
             (setq search-text (concat search-text (char-to-string char)))
             ;; Highlight
             (when (> (length search-text) 0)
-              (search-and-hightlight search-text start-point end-point)))
+              (search-and-hightlight search-text)))
           )
          ))
       )
