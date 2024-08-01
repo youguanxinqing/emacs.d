@@ -24,6 +24,8 @@
       '(go-mode rust-mode))
 (setq-hook! 'emacs-lisp-mode-hook +format-with-lsp nil)
 
+(setq lsp-enable-symbol-highlighting nil)
+
 ;; banner
 
 (defun banner-of-guan ()
