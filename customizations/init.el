@@ -23,6 +23,9 @@
 (setq +format-on-save-enabled-modes
       '(go-mode rust-mode))
 (setq-hook! 'emacs-lisp-mode-hook +format-with-lsp nil)
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t)
+  (setq lsp-auto-guess-root nil))
 
 ;; banner
 
