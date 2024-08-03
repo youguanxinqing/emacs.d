@@ -17,7 +17,6 @@
  (defun channge-hl-line-mode ()
    (setq-local hl-line-face 'custom-line-highlight)
    (overlay-put hl-line-overlay 'face hl-line-face)
-
    ))
 
 (setq +format-on-save-enabled-modes
@@ -25,7 +24,13 @@
 (setq-hook! 'emacs-lisp-mode-hook +format-with-lsp nil)
 (after! lsp-mode
   (setq lsp-inlay-hint-enable t)
-  (setq lsp-auto-guess-root nil))
+  (setq lsp-auto-guess-root nil)
+  )
+
+(custom-set-faces
+ '(lsp-inlay-hint-type-face ((t (:foreground "#808080"))))
+ '(lsp-inlay-hint-face ((t (:foreground "#808080"))))
+ )
 
 (setq lsp-enable-symbol-highlighting nil)
 
