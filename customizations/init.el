@@ -27,6 +27,8 @@
   (setq lsp-inlay-hint-enable t)
   (setq lsp-auto-guess-root nil))
 
+(setq lsp-enable-symbol-highlighting nil)
+
 ;; banner
 
 (defun banner-of-guan ()
