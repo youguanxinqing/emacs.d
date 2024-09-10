@@ -85,7 +85,7 @@
 (defun guan/--font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
   (find-font (font-spec :name font-name)))
-;; (guan/--font-installed-p "LXGWWenKaiMonoScreen")
+;; (guan/--font-installed-p "LXGW WenKai Mono Screen")
 
 (defun guan/enable-auto-set-font (&optional font-size1 font-size2 font-size3 font-size4)
   (let ((font-size1 (if (equal nil font-size1) 14.5 font-size1))
@@ -93,7 +93,7 @@
         (font-size3 (if (equal nil font-size3) 14.5 font-size3))
         (font-size4 (if (equal nil font-size4) 14.5 font-size4)))
     (when (display-graphic-p)
-      (cl-loop for font in '("LXGWWenKaiMonoScreen" "Source Code Pro" "Fira Code"
+      (cl-loop for font in '("LXGWWenKaiMonoScreen" "LXGW WenKai Mono Screen" "Source Code Pro" "Fira Code"
                              "Menlo" "Monaco" "Dejavu Sans Mono"
                              "Lucida Console" "Consolas" "SAS Monospace")
                when (guan/--font-installed-p font)
@@ -110,7 +110,7 @@
                                         (font-spec :family font
                                                    :size font-size2)
                                         nil 'prepend))
-      (cl-loop for font in '("LXGWWenKaiMonoScreen" "LXGWWenKaiMonoGBScreen"
+      (cl-loop for font in '("LXGWWenKaiMonoScreen" "LXGW WenKai Mono Screen" "LXGWWenKaiMonoGBScreen"
                              "noto-fonts-cjk" "思源黑体 CN" "思源宋体 CN" "微软雅黑 CN"
                              "Source Han Sans CN" "Source Han Serif CN"
                              "WenQuanYi Micro Hei" "文泉驿等宽微米黑"
