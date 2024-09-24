@@ -207,7 +207,7 @@
   "T" 'evil-avy-goto-char-in-line)
 
 (map! :n "C-t" nil)
-(define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward-swap)
+(define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward)
 (global-set-key [remap evil-jump-to-tag] nil)
 (define-key evil-motion-state-map (kbd "C-]") 'evil-jump-to-tag)
 
@@ -375,6 +375,7 @@
  :n "gr" #'+lookup/references)
 
 (global-set-key (kbd "C-j") nil)
+(global-set-key (kbd "C-k") nil)
 (global-set-key (kbd "M-i") nil)
 
 (define-key evil-window-map "v" '+evil/window-vsplit-and-follow)
