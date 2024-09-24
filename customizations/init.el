@@ -9,7 +9,9 @@
 (dolist (module-name '("upload-server"
                        "run-anything"
                        "grpc"
-                       "flash"))
+                       "flash"
+                       "lsp"
+                       ))
   (load (format "%s.el" module-name)))
 
 (add-hook
@@ -209,7 +211,7 @@
 (map! :n "C-t" nil)
 (define-key evil-motion-state-map (kbd "C-t") 'evil-jump-backward)
 (global-set-key [remap evil-jump-to-tag] nil)
-(define-key evil-motion-state-map (kbd "C-]") 'evil-jump-to-tag)
+(define-key evil-motion-state-map (kbd "C-]") 'lsp-bridge-find-def)
 
 ;; highlight symbol
 (require 'hi-lock)
